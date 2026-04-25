@@ -3,4 +3,18 @@
 <h3>wsl --set-default-user root</h3>
 <h3>sudo chown -R $USER:$USER /path/to/project</h3>
 <h3>ls -la /opt/docker_proj</h3>
+<h<powershell ssh configuration</h>
+<h3>Stop-Service ssh-agent</h3>
+<p>carefule whioel executing below command as it will delete all kind of keys, earlier connection with machine may get lost</p>
+<h3>Remove-Item $env:USERPROFILE\.ssh\id_ed25519*</h3>
+<h3>Remove-Item $env:USERPROFILE\.ssh\id_rsa*</h3>
+<p>generating keys and following process again</p>
+<h3>ssh-keygen -t ed25519 -C "your_email@example.com"</h3>
+<h3>notepad C:\Users\acer\.ssh\.\id_ed25519.pub</h3>
+<h3>copy the key to settings ssh grfg of copilot</h3>
+<h3>Start-Service ssh-agent</h3>
+<h3>ssh-add $env:USERPROFILE\.ssh\id_ed25519</h3>
+<h3>verify</h3>
+<h3>ssh-add -l</h3>
+<h3>ssh -T git@github.com</h3>
 
