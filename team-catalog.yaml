@@ -1,0 +1,12 @@
+catalog:
+  name: team-catalog
+  title: "Team Collaboration Tools"
+  servers:
+    - name: slack-bot
+      source: docker://docker.io/nksharma063/mcptesting/slack-bot:latest
+    - name: github-official
+      source: catalog://mcp/docker-mcp-catalog/github-official
+    - name: mongodb
+      source: docker://docker.io/nksharma063/mcptesting/mongodb:latest
+    - name: sonarqube
+      source: docker://docker.io/nksharma063/mcptesting/sonarqube:latest
