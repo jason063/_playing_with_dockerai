@@ -1,0 +1,36 @@
+schemaVersion: "1"
+kind: agent
+name: mcp-gateway
+displayName: MCP Gateway
+description: "Unified MCP agent with Tavily + SonarQube"
+
+agent:
+  image: "docker/sandbox-templates:shell-docker"
+  persistence: persistent
+  entrypoint:
+    run: ["docker", "mcp", "gateway", "run", "--profile", "default"]
+
+network:
+  allowedDomains:
+    - "sonarcloud.io"
+    - "tavily.com"
+    - "github.com"
+
+credentials:
+  sources:
+    tavily:
+      env:
+        - TAVILY_API_KEY
+    sonar:
+      env:
+        - SONARQUBE_URL
+        - SONARQUBE_TOKEN
+{
+  "servers": {
+    "MCP_DOCKER": {
+      "command": "docker",
+      "args": ["mcp", "gateway", "run", "--profile", "backenddevelopment"],
+      "type": "stdio"
+    }
+  }
+}

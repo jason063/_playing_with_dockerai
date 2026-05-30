@@ -1,0 +1,118 @@
+schemaVersion: "1"
+kind: agent
+name: gemini-agent
+agent:
+  image: "docker/sandbox-templates:gemini-docker"
+  aiFilename: GEMINI.md
+  persistence: persistent
+  entrypoint:
+    run: [gemini, "--dangerously-skip-permissions"]
+
+network:
+  serviceDomains:
+    api.tavily.com: tavily
+    api.gemini.com: gemini
+    api.aistudio.google.com: gemini
+  serviceAuth:
+    gemini:
+      headerName: Authorization
+      valueFormat: "%s"
+  allowedDomains:
+    - "tavily.com:443"
+    - "gemini.com:443"
+    - "aistudio.google.com:443"
+    # Added node/npm registry domains so the install command doesn't get blocked
+    - "registry.npmjs.org:443"
+    - "nodesource.com:443"
+
+credentials:
+  sources:
+    gemini:
+      file:
+        path: "./.env"
+        parser: "env"
+      env:
+        - GEMINI_API_KEY
+    tavily:
+      file:
+        path: "./.env"
+        parser: "env"
+      env:
+        - TAVILY_API_KEY
+
+environment:
+  variables:
+    IS_SANDBOX: "1"
+
+commands:
+  install:
+    # 1. Update package manager and install Node.js/npm
+    - command: "apt-get update && apt-get install -y nodejs npm"
+      user: "root"
+      description: Install Node.js and npm package manager
+      
+    # 2. Install the Gemini developer package globally
+    - command: "npm install -g @google/genai"
+      user: "1000"
+      description: Install Gemini Developer API SDK / CLI Tools
+
+
+
+# schemaVersion: "1"
+# kind: agent
+# name: gemini-agent
+# agent:
+#   image: "docker/sandbox-templates:gemini-docker"
+#   aiFilename: GEMINI.md
+#   persistence: persistent
+#   entrypoint:
+#     run: [gemini, "--dangerously-skip-permissions"]
+
+# network:
+#   serviceDomains:
+#     api.tavily.com: tavily
+#     api.gemini.com: gemini
+#     api.aistudio.google.com: gemini
+#   serviceAuth:
+#     gemini:
+#       headerName: Authorization
+#       valueFormat: "%s"
+#   allowedDomains:
+#     - "tavily.com:443"
+#     - "gemini.com:443"
+#     - "aistudio.google.com:443"
+#     # Added node/npm registry domains so the install command doesn't get blocked
+#     - "registry.npmjs.org:443"
+#     - "nodesource.com:443"
+# credentials:
+#   sources:
+#     <service-id>:
+#       env: [<env-var>, ...]
+#       file:
+#         path: <path>
+#         parser: <parser>
+#       priority: <env-first | file-first>
+# credentials:
+#   sources:
+#     gemini:
+#       env:
+#         - GEMINI_API_KEY
+#     tavily:
+#       env:
+#         - TAVILY_API_KEY
+
+# environment:
+#   variables:
+#     IS_SANDBOX: "1"
+
+# commands:
+#   install:
+#     # 1. Update package manager and install Node.js/npm (using root/sudo if required, or user 1000 if permitted)
+#     - command: "sudo apt-get update && sudo apt-get install -y nodejs npm"
+#       user: "root"
+#       description: Install Node.js and npm package manager
+      
+#     # 2. Install the Gemini developer package globally
+#     - command: "npm install -g @google/genai"
+#       user: "1000"
+#       description: Install Gemini Developer API SDK / CLI Tools
